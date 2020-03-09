@@ -73,8 +73,10 @@
 			$bucketListInfo = $ossClient->listBuckets();
 			
 			session_start();
-			setcookie("accessKeyId",$accessKeyId,time()+60*60*24*7);
-			setcookie("accessKeySecret",$accessKeySecret,time()+60*60*24*7);
+			$_SESSION["accessKeyId"]=$accessKeyId;
+			$_SESSION["accessKeySecret"]=$accessKeySecret;
+			//setcookie("accessKeyId",$accessKeyId,time()+60*60*24*7);
+			//setcookie("accessKeySecret",$accessKeySecret,time()+60*60*24*7);
 			
 			echo "<script>alert('登录成功');location='main.php'</script>";
 		} 

@@ -79,8 +79,13 @@
 	setcookie("location",$location,time()+60*60*24*7);
 	
 	//创建OSS操作对象所需参数
-	$accessKeySecret=$_COOKIE['accessKeySecret'];
-	$accessKeyId=$_COOKIE['accessKeyId'];
+	
+	$accessKeyId=@$_SESSION["accessKeyId"];
+	$accessKeySecret=@$_SESSION["accessKeySecret"];
+	if($accessKeyId && $accessKeySecret){
+		
+	//$accessKeySecret=$_COOKIE['accessKeySecret'];
+	//$accessKeyId=$_COOKIE['accessKeyId'];
 	
 	if(@$_POST['location']){
 			$ossClient = new OssClient($accessKeyId, $accessKeySecret, $location);
@@ -149,5 +154,9 @@
 	echo "</form>";
 	echo "</div>";
 	echo "</div>";
+	}
+	else{
+		echo "<script>alert('管理员帐号缓存失效，请重新登录');</script>";
+	}
 	
 ?>

@@ -47,6 +47,8 @@
 		$sql='set names utf8';
 		$pdo->exec($sql);
 		
+		$pdo->beginTransaction();//开启事务机制 
+		
 		$tableName=$bucket."_user";//表名
 		$result = $pdo->query("show tables like '". $tableName."'");
 		$row = $result->fetchAll();
@@ -128,6 +130,7 @@
 
 				}
 			}
+			$pdo->commit();
 			echo "<script>location='showBucketFile.php?query=ok&bucket={$bucket}&parentPath={$parentPath}';</script>";
 		}
 		catch (OSSException $e) {

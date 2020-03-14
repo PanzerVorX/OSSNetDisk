@@ -49,6 +49,6 @@
 		}	
 	}
 	elseif(!isset($_POST['bucket'])){
-		echo "<script>alert('文件过大，请选择多文件上传');location='frameOperation.php'</script>";
+		echo "<script>alert('文件过大，请选择多文件上传');location='showBucketFile.php?query=ok&bucket={$bucket}&parentPath={$parentPath}'</script>";
 	}
 ?>

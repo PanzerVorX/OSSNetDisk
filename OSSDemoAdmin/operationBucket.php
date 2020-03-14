@@ -76,7 +76,35 @@
 				$smt=$pdo->prepare($sql);
 				$smt->bindParam(1,$value);
 				$smt->execute();
-				var_dump($value);
+				
+				//删除站内通告表
+				$tableName=$value."_notice";//表名
+				$result = $pdo->query("show tables like '". $tableName."'");
+				$row = $result->fetchAll();
+				if(count($row)){//若存在则删除
+					$sql="drop table {$tableName}";
+					$pdo->exec($sql);
+				} 
+				
+				//删除用户文件查询表
+				$tableName=$value."_user";//表名
+				$result = $pdo->query("show tables like '". $tableName."'");
+				$row = $result->fetchAll();
+				if(count($row)){//若存在则删除
+					$sql="drop table {$tableName}";
+					$pdo->exec($sql);
+				} 
+				
+				//删除管理员文件查询表
+				$tableName=$value."_admin";//表名
+				$result = $pdo->query("show tables like '". $tableName."'");
+				$row = $result->fetchAll();
+				if(count($row)){//若存在则删除
+					$sql="drop table {$tableName}";
+					$pdo->exec($sql);
+				}
+				
+				
 			}
 			catch(Exception $e){
 				echo "<script>alert('删除存储空间失败');location='frameOperation.php'</script>";
@@ -157,6 +185,7 @@
 		    $ossClient->createBucket($bucket, OssClient::OSS_ACL_TYPE_PUBLIC_READ, $options);
 			
 			$pdo=new PDO('mysql:host=localhost;dbname=test','root','19450902');
+			$pdo->beginTransaction();//开启事务机制 
 			$sql='set names utf8';
 			$pdo->exec($sql);
 			
@@ -166,6 +195,31 @@
 			$smt->bindParam(2,$bucket);
 			$smt->bindParam(3,$location);
 			if($smt->execute()){
+				
+			//创建站内通告表
+			$tableName=$bucket."_notice";//表名
+			$result = $pdo->query("show tables like '". $tableName."'");
+			$row = $result->fetchAll();
+			if(count($row)){//若存在则清空表
+				$sql="truncate {$tableName}";
+			} 
+			else {//若不存在则创建表
+				$sql="create table {$tableName}(
+							notice_id int auto_increment primary key,
+							notice_content LONGTEXT not null,
+							notice_date char(50) not null,
+							notice_status char(10) not null default '未读',
+							user_name char(20) not null
+						)engine=InnoDB default charset=gbk;";
+			}
+			$pdo->exec($sql);
+				
+			date_default_timezone_set('PRC');
+			$now_time=date('Y-n-j H:i:s');
+			$sql="insert into {$tableName} (notice_content,notice_date,user_name) values ('用户：{$bucket}，欢迎开通并使用在线网盘','{$now_time}','{$bucket}');";
+			$pdo->exec($sql);			
+			
+			$pdo->commit();
 				echo "<script>alert('创建成功，用户名与密码都为存储空间名');location='storeRecords.php?query=ok&bucket={$bucket}&parentPath='</script>";
 			};
 		} 

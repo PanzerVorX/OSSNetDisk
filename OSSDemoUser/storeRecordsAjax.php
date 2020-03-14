@@ -26,7 +26,8 @@
 ?>
 
 	<div id='totalDiv'>
-	<span>存储空间：<a href='userInfo.php?query=ok&bucket=<?php echo $bucket;?>&parentPath=<?php echo @$_GET["parentPath"];?>'><?php echo $bucket;?></a></span></br>
+	<span>用户名：<a href='userInfo.php?query=ok&bucket=<?php echo $bucket;?>&parentPath=<?php echo @$_GET["parentPath"];?>'><?php echo $bucket;?></a></span></br>
+	<div class='notice'><a href='noticeList.php?query=ok&bucket=<?php echo $bucket;?>&parentPath=<?php echo @$_GET["parentPath"];?>'>站内通告</a></div>
 	<form method="get" name='fm1' class="fm1">
 		<span>文件名：</span><input type="text" name="fileName" placeholder='模糊查询'><input type="button"  onclick="queryRecordBlurry()" class="query" name="query" value="查询">
 		<input type="hidden" name="bucket1" value=<?php echo $bucket;?>>

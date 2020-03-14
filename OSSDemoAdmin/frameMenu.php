@@ -110,7 +110,7 @@
 
 	echo "<div class='div1'>";
 	echo "<form name='fm1' method='post' action='operationBucket.php' target='frameOperation'>";
-	echo "<span>存储空间<sapn>";
+	echo "<span>用户管理<sapn>";
 	//表单内被选中的提交按钮(submit)在提交参数时屏蔽其它提交按钮元素（不会传递其它提交按钮的参数）
 	echo "<input type='submit' name='create' value='创建'>";
 	echo "<input type='submit' name='delete' value='删除'>";

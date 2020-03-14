@@ -114,6 +114,30 @@
 							);
 							//设置存储空间的权限为公共读，默认是私有读写
 							$ossClient->createBucket($userName, OssClient::OSS_ACL_TYPE_PUBLIC_READ, $options);
+							
+							
+							$tableName=$userName."_notice";//表名
+							$result = $pdo->query("show tables like '". $tableName."'");
+							$row = $result->fetchAll();
+							if(count($row)){//若存在则清空表
+								$sql="truncate {$tableName}";
+							} 
+							else {//若不存在则创建表
+								$sql="create table {$tableName}(
+											notice_id int auto_increment primary key,
+											notice_content LONGTEXT not null,
+											notice_date char(50) not null,
+											notice_status char(10) not null default '未读',
+											user_name char(20) not null
+										)engine=InnoDB default charset=gbk;";
+							}
+							$pdo->exec($sql);
+								
+							date_default_timezone_set('PRC');
+							$now_time=date('Y-n-j H:i:s');
+							$sql="insert into {$tableName} (notice_content,notice_date,user_name) values ('用户：{$userName}，欢迎开通并使用在线网盘','{$now_time}','{$userName}');";
+							$pdo->exec($sql);
+							
 							$pdo->commit();
 							echo "<script>alert('注册成功');location='login.php'</script>";
 						}	
